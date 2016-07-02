@@ -4,6 +4,10 @@
 <link rel="import" href="../../bower_components/app-layout/app-scroll-effects/app-scroll-effects.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+
+<link rel="import" href="goalsprint-view-home.html">
 
 <dom-module id="goalsprint-app">
   <template>
@@ -23,6 +27,9 @@
       <app-drawer>
         <app-toolbar>
         </app-toolbar>
+        <iron-selector selected="{{page}}" attr-for-selected="name">
+          <a name="home">Home</a>
+        </iron-selector>
       </app-drawer>
 
       <app-header-layout>
@@ -33,13 +40,16 @@
           </app-toolbar>
         </app-header>
 
-        <div>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec commodo purus at vehicula vulputate. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed a dui vel lorem feugiat mattis quis vel arcu. Curabitur pretium semper nisi, vitae faucibus ipsum volutpat ac. Duis tincidunt convallis turpis ut vestibulum. Proin tincidunt velit vel fermentum tempus. Proin ut posuere metus. Nam commodo iaculis ligula, quis egestas ex efficitur sed. Duis posuere elementum semper. Sed porttitor luctus pellentesque. Nulla cursus enim in eleifend efficitur. Phasellus ut viverra tortor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Duis ac augue vitae arcu iaculis dignissim auctor in nunc. Cras pellentesque lectus in lectus accumsan, id rhoncus elit maximus. Fusce auctor tempor mauris, tempus vestibulum dui pulvinar in.</p>
-          <p>Etiam purus tellus, condimentum at iaculis in, finibus ut nisl. Sed auctor aliquet diam non varius. Sed ut est vel dui dignissim accumsan. Nunc pretium blandit tellus. Proin a nibh vitae elit malesuada tristique. In sollicitudin fermentum nisi nec hendrerit. Nam malesuada, tellus vel fermentum commodo, quam ex vestibulum sapien, sed pellentesque sem metus vitae est. Aenean pretium, ipsum at feugiat malesuada, massa tortor placerat justo, sit amet congue velit odio ut ante. Proin vel nibh sagittis, aliquam tellus non, interdum nulla. Cras semper felis id nibh vestibulum, vel dictum augue placerat. Donec mattis odio urna, vitae blandit turpis iaculis ut. Nullam est risus, egestas quis convallis gravida, dignissim vitae sem. Sed posuere nisl orci, a aliquet purus varius a.</p>
-          <p>In vehicula ipsum id lectus pharetra tempor. Integer cursus nisl quis purus rutrum, sed convallis nisl laoreet. Suspendisse ac sodales eros. Nam quis lacus et lacus euismod imperdiet. Nam vitae maximus risus. Cras consequat nulla ac arcu dignissim semper. Etiam tellus lacus, facilisis ac libero ut, viverra dictum nulla. Nunc eleifend sapien nisi. Etiam orci augue, euismod at sodales nec, dapibus sed mauris. Sed nec finibus elit. Vivamus in elit aliquet sapien efficitur vestibulum non et mauris. Etiam nec faucibus odio. Donec ut odio quis ligula dictum aliquam. Praesent blandit ultricies dui, id tristique ex consequat rhoncus. Etiam pulvinar ipsum elit, ullamcorper rutrum metus consequat quis. Donec aliquet blandit augue a auctor.</p>
-          <p>Donec ultricies, augue a eleifend pharetra, quam ante facilisis lectus, eu tristique massa erat a tellus. Aenean dapibus tristique nisl a varius. Curabitur non condimentum erat. Suspendisse potenti. Suspendisse eget quam eget felis viverra faucibus vel quis risus. Maecenas velit eros, pretium in pharetra in, pretium et quam. Quisque faucibus neque eget purus pellentesque blandit.</p>
-          <p>Cras feugiat et ipsum malesuada accumsan. Cras id risus vitae dui porta gravida. Donec a lectus egestas, finibus urna ut, posuere diam. Donec ut erat sed sapien sollicitudin varius ac sed nisi. Maecenas at orci quis nulla feugiat imperdiet. Pellentesque id tempor metus. Maecenas eros purus, egestas nec tincidunt eu, ultrices in neque. Aliquam bibendum erat nec semper eleifend. Morbi sed nibh vel tortor aliquam facilisis.</p>
-        </div>
+        <iron-pages selected="{{page}}" attr-for-selected="name">
+          <div name="home">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec commodo purus at vehicula vulputate. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed a dui vel lorem feugiat mattis quis vel arcu. Curabitur pretium semper nisi, vitae faucibus ipsum volutpat ac. Duis tincidunt convallis turpis ut vestibulum. Proin tincidunt velit vel fermentum tempus. Proin ut posuere metus. Nam commodo iaculis ligula, quis egestas ex efficitur sed. Duis posuere elementum semper. Sed porttitor luctus pellentesque. Nulla cursus enim in eleifend efficitur. Phasellus ut viverra tortor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Duis ac augue vitae arcu iaculis dignissim auctor in nunc. Cras pellentesque lectus in lectus accumsan, id rhoncus elit maximus. Fusce auctor tempor mauris, tempus vestibulum dui pulvinar in.</p>
+            <p>Etiam purus tellus, condimentum at iaculis in, finibus ut nisl. Sed auctor aliquet diam non varius. Sed ut est vel dui dignissim accumsan. Nunc pretium blandit tellus. Proin a nibh vitae elit malesuada tristique. In sollicitudin fermentum nisi nec hendrerit. Nam malesuada, tellus vel fermentum commodo, quam ex vestibulum sapien, sed pellentesque sem metus vitae est. Aenean pretium, ipsum at feugiat malesuada, massa tortor placerat justo, sit amet congue velit odio ut ante. Proin vel nibh sagittis, aliquam tellus non, interdum nulla. Cras semper felis id nibh vestibulum, vel dictum augue placerat. Donec mattis odio urna, vitae blandit turpis iaculis ut. Nullam est risus, egestas quis convallis gravida, dignissim vitae sem. Sed posuere nisl orci, a aliquet purus varius a.</p>
+            <p>In vehicula ipsum id lectus pharetra tempor. Integer cursus nisl quis purus rutrum, sed convallis nisl laoreet. Suspendisse ac sodales eros. Nam quis lacus et lacus euismod imperdiet. Nam vitae maximus risus. Cras consequat nulla ac arcu dignissim semper. Etiam tellus lacus, facilisis ac libero ut, viverra dictum nulla. Nunc eleifend sapien nisi. Etiam orci augue, euismod at sodales nec, dapibus sed mauris. Sed nec finibus elit. Vivamus in elit aliquet sapien efficitur vestibulum non et mauris. Etiam nec faucibus odio. Donec ut odio quis ligula dictum aliquam. Praesent blandit ultricies dui, id tristique ex consequat rhoncus. Etiam pulvinar ipsum elit, ullamcorper rutrum metus consequat quis. Donec aliquet blandit augue a auctor.</p>
+            <p>Donec ultricies, augue a eleifend pharetra, quam ante facilisis lectus, eu tristique massa erat a tellus. Aenean dapibus tristique nisl a varius. Curabitur non condimentum erat. Suspendisse potenti. Suspendisse eget quam eget felis viverra faucibus vel quis risus. Maecenas velit eros, pretium in pharetra in, pretium et quam. Quisque faucibus neque eget purus pellentesque blandit.</p>
+            <p>Cras feugiat et ipsum malesuada accumsan. Cras id risus vitae dui porta gravida. Donec a lectus egestas, finibus urna ut, posuere diam. Donec ut erat sed sapien sollicitudin varius ac sed nisi. Maecenas at orci quis nulla feugiat imperdiet. Pellentesque id tempor metus. Maecenas eros purus, egestas nec tincidunt eu, ultrices in neque. Aliquam bibendum erat nec semper eleifend. Morbi sed nibh vel tortor aliquam facilisis.</p>
+          </div>
+          <!--<goalsprint-view-home></goalsprint-view-home>-->
+        </iron-pages>
 
       </app-header-layout>
 
@@ -51,11 +61,18 @@
       is: 'goalsprint-app',
 
       properties: {
-        prop1: {
+        page: {
           type: String,
-          value: 'goalsprint-app',
+          reflectToAttribute: true,
+          //observer: '_pageChanged',
+          value: 'home'
         },
       },
+
+      /*_pageChanged: function(newValue, oldValue) {
+        this.importHref(this.resolveUrl('goalsprint-view-' + newValue + '.html'),
+                        null, null, true);
+      }*/
 
     });
   </script>
