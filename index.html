@@ -6,7 +6,26 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="manifest" href="/manifest.json">
-    <script src="/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script>
+      // Setup Polymer
+      window.Polymer = {
+        lazyRegister: true,
+        dom: 'shadow'
+      };
+
+      // Load webcomponentsjs polyfill, if needed
+      (function() {
+        if ('registerElement' in document
+            && 'import' in document.createElement('link')
+            && 'content' in document.createElement('template')) {
+          // Browser already knows of WebCompontents, don't load polyfill
+        } else {
+          var polyfill = document.createElement('script');
+          polyfill.src = '/bower_components/webcomponentsjs/webcomponents-lite.js';
+          document.head.appendChild(polyfill);
+        }
+      })();
+    </script>
     <link rel="import" href="/src/goalsprint-app/goalsprint-app.html">
   </head>
   <body>
