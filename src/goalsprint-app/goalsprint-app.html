@@ -7,8 +7,6 @@
 <link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 
-<link rel="import" href="goalsprint-view-home.html">
-
 <dom-module id="goalsprint-app">
   <template>
     <style>
@@ -57,15 +55,15 @@
         page: {
           type: String,
           reflectToAttribute: true,
-          //observer: '_pageChanged',
+          observer: '_pageChanged',
           value: 'home'
         },
       },
 
-      /*_pageChanged: function(newValue, oldValue) {
+      _pageChanged: function(newValue, oldValue) {
         this.importHref(this.resolveUrl('goalsprint-view-' + newValue + '.html'),
                         null, null, true);
-      }*/
+      }
 
     });
   </script>
