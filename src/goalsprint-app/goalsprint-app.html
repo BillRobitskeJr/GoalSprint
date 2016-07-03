@@ -6,6 +6,7 @@
 <link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/polymerfire/polymerfire.html">
 
 <dom-module id="goalsprint-app">
   <template>
@@ -13,20 +14,39 @@
       :host {
         display: block;
         --app-primary-color: #2196f3; /* Blue 500 */
+        --app-secondary-color: #64ffda; /* Teal A200 */
       }
       :host app-header {
         background-color: var(--app-primary-color);
         color: #fff;
       }
+      :host app-drawer a {
+        display: block;
+        padding: 0 16px;
+        line-height: 40px;
+        text-decoration: none;
+        color: #000;
+        cursor: pointer;
+      }
+      :host app-drawer .iron-selected {
+        background-color: var(--app-secondary-color);
+      }
     </style>
+
+    <firebase-app auth-domain="goalsprint.firebaseapp.com"
+                  database-url="https://goalsprint.firebaseio.com"
+                  api-key="AIzaSyB75anH1ynPLOUs9_-dnKvIngX5fKxGOwk"></firebase-app>
+    <firebase-auth user="{{user}}"></firebase-auth>
 
     <app-drawer-layout force-narrow>
 
       <app-drawer>
         <app-toolbar>
+          <div title>GoalSprint</div>
         </app-toolbar>
         <iron-selector selected="{{page}}" attr-for-selected="name">
           <a name="home">Home</a>
+          <a name="other">Other</a>
         </iron-selector>
       </app-drawer>
 
@@ -40,6 +60,7 @@
 
         <iron-pages selected="{{page}}" attr-for-selected="name">
           <goalsprint-view-home name="home"></goalsprint-view-home>
+          <goalsprint-view-other name="other"></goalsprint-view-other>
         </iron-pages>
 
       </app-header-layout>
