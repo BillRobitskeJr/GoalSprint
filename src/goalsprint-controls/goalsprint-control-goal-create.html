@@ -1,0 +1,103 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/paper-radio-group/paper-radio-group.html">
+<link rel="import" href="../../bower_components/paper-radio-button/paper-radio-button.html">
+
+<dom-module id="goalsprint-control-goal-create">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      :host div paper-input {
+        display: inline-block;
+      }
+    </style>
+    <p>Testing "Create new goal" interface</p>
+    <paper-input label="Goal title (optional)" value="{{goal.title}}"></paper-input>
+    <div>
+      Define goal by:
+      <paper-radio-group selected="{{_definitionScheme}}">
+        <paper-radio-button name="total">Total activity</paper-radio-button>
+        <paper-radio-button name="daily">Daily activity</paper-radio-button>
+      </paper-radio-group>
+    </div>
+    <iron-pages selected="{{_definitionScheme}}" attr-for-selected="scheme">
+      <div scheme="total">
+        I will complete
+        <paper-input label="total" value="{{_totalActivity}}"></paper-input>
+        <paper-input label="items" value="{{goal.activityUnit}}"></paper-input>
+        in <paper-input label="duration" value="{{_duration}}"></paper-input> days.<br>
+        To reach this goal, I will complete <strong>[[_dailyActivity]] [[goal.activityUnit]]</strong> each day.
+      </div>
+      <div scheme="daily">
+        I will complete
+        <paper-input label="daily total" value="{{_dailyActivity}}"></paper-input>
+        <paper-input label="items" value="{{goal.activityUnit}}"></paper-input>
+        each day for <paper-input label="duration" value="{{_duration}}"></paper-input> days.<br>
+        By the end, I will have completed <strong>[[_totalActivity]] [[goal.activityUnit]]</strong>.
+      </div>
+    </iron-pages>
+    <paper-textarea label="Goal description (optional)" value="{{goal.description}}"></paper-textarea>
+  </template>
+  <script>
+    Polymer({
+      is: 'goalsprint-control-goal-create',
+
+      properties: {
+        goal: {
+          type: Object,
+          value: function() {
+            return {
+              title: '',
+              activityTotal: 90,
+              activityUnit: 'items',
+              duration: 30,
+              description: ''
+            };
+          },
+          notify: true
+        },
+        _definitionScheme: {
+          type: String,
+          value: 'total'
+        },
+        _totalActivity: {
+          type: Number,
+          value: 90
+        },
+        _dailyActivity: {
+          type: Number,
+          value: 3
+        },
+        _duration: {
+          type: Number,
+          value: 30
+        }
+      },
+
+      observers: [
+        '_activityChanged(_totalActivity, _dailyActivity, _duration, _definitionScheme)'
+      ],
+
+      _activityChanged: function(totalActivity, dailyActivity, duration, definitionScheme) {
+        if (definitionScheme === 'total'
+            && (this.goal.activityTotal !== totalActivity
+                || this.goal.duration !== duration)) {
+          this.goal.activityTotal = totalActivity;
+          this.goal.duration = duration;
+          this._dailyActivity = Math.round(totalActivity / duration);
+        } else if (definitionScheme === 'daily'
+            && (this.goal.activityTotal !== (dailyActivity * duration)
+                || this.goal.duration !== duration)) {
+          this.goal.activityTotal = dailyActivity * duration;
+          this.goal.duration = duration;
+          this._totalActivity = dailyActivity * duration;
+        }
+      }
+    });
+  </script>
+</dom-module>

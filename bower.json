@@ -7,7 +7,10 @@
     "app-layout": "PolymerElements/app-layout#^0.9.1",
     "paper-icon-button": "PolymerElements/paper-icon-button#^1.1.2",
     "iron-pages": "PolymerElements/iron-pages#^1.0.7",
-    "polymerfire": "firebase/polymerfire#^0.9.3"
+    "polymerfire": "firebase/polymerfire#^0.9.3",
+    "paper-input": "PolymerElements/paper-input#^1.1.14",
+    "paper-radio-group": "PolymerElements/paper-radio-group#^1.2.0",
+    "paper-radio-button": "PolymerElements/paper-radio-button#^1.2.1"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
