@@ -1,0 +1,100 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="../goalsprint-controls/goalsprint-control-goal-create.html">
+
+<dom-module id="goalsprint-view-goals">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+      :host .list {
+        margin: 0.325rem 0.625rem;
+        padding: 24px;
+        background-color: #fff;
+      }
+      :host paper-button {
+        background-color: var(--app-secondary-color);
+      }
+      :host .list__title {
+        font-size: 20px;
+        font-weight: 500;
+        line-height: 28px;
+        margin: 0;
+      }
+      :host .list__controls {
+        text-align: right;
+      }
+    </style>
+    <paper-dialog id="createGoalDialog"
+                  on-iron-overlay-closed="_handleCreateGoalDialogClosed">
+      <h2>Set a new goal</h2>
+      <goalsprint-control-goal-create goal="{{_newGoal}}"></goalsprint-control-goal-create>
+      <div>
+        <paper-button dialog-confirm>Create</paper-button>
+        <paper-button dialog-dismiss>Cancel</paper-button>
+      </div>
+    </paper-dialog>
+    <paper-material elevation="1" class="list">
+      <h2 class="list__title">My current goals</h2>
+      <paper-listbox>
+        <template is="dom-repeat" items="{{goals}}">
+          <paper-item>
+            <paper-item-body two-line>
+              <div>{{item.title}}</div>
+              <div secondary>{{_generateGoalSummary(item.activityTotal, item.activityUnit, item.duration)}}</div>
+            </paper-item-body>
+          </paper-item>
+        </template>
+      </paper-listbox>
+      <div class="list__controls">
+        <paper-button raised on-tap="_handleCreateTap">Create a new goal</paper-button>
+      </div>
+    </paper-material>
+  </template>
+  <script>
+    Polymer({
+      is: 'goalsprint-view-goals',
+
+      properties: {
+        goals: {
+          type: Array,
+          value: function() { return []; }
+        },
+        _newGoal: {
+          type: Object,
+          value: function() { return {}; }
+        }
+      },
+
+      _generateGoalSummary: function(activityTotal, activityUnit, duration) {
+        return 'Complete ' + activityTotal + ' ' + activityUnit + ' in ' + duration + ' days.';
+      },
+
+      _handleCreateTap: function(event) {
+        var newGoal = {
+          title: '',
+          activityTotal: 90,
+          activityUnit: 'items',
+          duration: 30,
+          description: ''
+        };
+        this._newGoal = newGoal;
+        this.$.createGoalDialog.open();
+      },
+
+      _handleCreateGoalDialogClosed: function(event) {
+        if (event.detail.confirmed) {
+          this.push('goals', this._newGoal);
+        }
+      }
+    });
+  </script>
+</dom-module>

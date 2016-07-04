@@ -7,6 +7,8 @@
 <link rel="import" href="../../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../../bower_components/polymerfire/polymerfire.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
 
 <dom-module id="goalsprint-app">
   <template>
@@ -46,7 +48,7 @@
         </app-toolbar>
         <iron-selector selected="{{page}}" attr-for-selected="name">
           <a name="home">Home</a>
-          <a name="other">Other</a>
+          <a name="goals">Goals</a>
         </iron-selector>
       </app-drawer>
 
@@ -55,12 +57,16 @@
           <app-toolbar>
             <paper-icon-button icon="icons:menu" drawer-toggle></paper-icon-button>
             <div title>GoalSprint</div>
+            <paper-tabs selected="{{page}}" attr-for-selected="name">
+              <paper-tab name="home">Home</paper-tab>
+              <paper-tab name="goals">Goals</paper-tab>
+            </paper-tabs>
           </app-toolbar>
         </app-header>
 
         <iron-pages selected="{{page}}" attr-for-selected="name">
           <goalsprint-view-home name="home"></goalsprint-view-home>
-          <goalsprint-view-other name="other"></goalsprint-view-other>
+          <goalsprint-view-goals name="goals"></goalsprint-view-goals>
         </iron-pages>
 
       </app-header-layout>
