@@ -16,7 +16,6 @@
         display: inline-block;
       }
     </style>
-    <p>Testing "Create new goal" interface</p>
     <paper-input label="Goal title (optional)" value="{{goal.title}}"></paper-input>
     <div>
       Define goal by:
@@ -41,6 +40,10 @@
         By the end, I will have completed <strong>[[_totalActivity]] [[goal.activityUnit]]</strong>.
       </div>
     </iron-pages>
+    <div>
+      <paper-input label="Start date" value="{{_startDate}}"></paper-input>
+      <paper-input label="End date" value="[[_calculateEndDate(goal.startDate, _duration)]]" disabled></paper-input>
+    </div>
     <paper-textarea label="Goal description (optional)" value="{{goal.description}}"></paper-textarea>
   </template>
   <script>
@@ -51,12 +54,14 @@
         goal: {
           type: Object,
           value: function() {
+            var startDate = new Date();
             return {
               title: '',
               activityTotal: 90,
               activityUnit: 'items',
               duration: 30,
-              description: ''
+              description: '',
+              startDate: startDate
             };
           },
           notify: true
@@ -76,6 +81,14 @@
         _duration: {
           type: Number,
           value: 30
+        },
+        _startDate: {
+          type: String,
+          value: function() {
+            var startDate = new Date();
+            return startDate.toLocaleDateString();
+          },
+          observer: '_startDateChanged'
         }
       },
 
@@ -97,6 +110,17 @@
           this.goal.duration = duration;
           this._totalActivity = dailyActivity * duration;
         }
+      },
+
+      _calculateEndDate: function(startDate, duration) {
+        var endDate = new Date(startDate.valueOf());
+        endDate.setDate(endDate.getDate() + duration - 1);
+        return endDate.toLocaleDateString();
+      },
+
+      _startDateChanged: function(newValue, oldValue) {
+        var startDate = new Date(newValue);
+        this.goal.startDate = startDate;
       }
     });
   </script>
