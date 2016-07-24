@@ -33,15 +33,9 @@
         text-align: right;
       }
     </style>
-    <paper-dialog id="createGoalDialog"
-                  on-iron-overlay-closed="_handleCreateGoalDialogClosed">
-      <h2>Set a new goal</h2>
-      <goalsprint-control-goal-create goal="{{_newGoal}}"></goalsprint-control-goal-create>
-      <div>
-        <paper-button dialog-confirm>Create</paper-button>
-        <paper-button dialog-dismiss>Cancel</paper-button>
-      </div>
-    </paper-dialog>
+    <goalsprint-control-goal-create
+      id="createGoalDialog"
+      goal="{{_newGoal}}"></goalsprint-control-goal-create>
     <paper-material elevation="1" class="list">
       <h2 class="list__title">My current goals</h2>
       <paper-listbox>
@@ -79,13 +73,14 @@
       },
 
       _handleCreateTap: function(event) {
+        var now = new Date();
         var newGoal = {
           title: '',
           activityTotal: 90,
           activityUnit: 'items',
           duration: 30,
           description: '',
-          startDate: new Date()
+          startDate: new Date(now.toLocaleDateString())
         };
         this._newGoal = newGoal;
         this.$.createGoalDialog.open();

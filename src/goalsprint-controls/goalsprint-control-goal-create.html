@@ -1,5 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
@@ -16,35 +18,32 @@
         display: inline-block;
       }
     </style>
-    <paper-input label="Goal title (optional)" value="{{goal.title}}"></paper-input>
-    <div>
-      Define goal by:
-      <paper-radio-group selected="{{_definitionScheme}}">
-        <paper-radio-button name="total">Total activity</paper-radio-button>
-        <paper-radio-button name="daily">Daily activity</paper-radio-button>
-      </paper-radio-group>
-    </div>
-    <iron-pages selected="{{_definitionScheme}}" attr-for-selected="scheme">
-      <div scheme="total">
-        I will complete
-        <paper-input label="total" value="{{_totalActivity}}"></paper-input>
-        <paper-input label="items" value="{{goal.activityUnit}}"></paper-input>
-        in <paper-input label="duration" value="{{_duration}}"></paper-input> days.<br>
-        To reach this goal, I will complete <strong>[[_dailyActivity]] [[goal.activityUnit]]</strong> each day.
+    <paper-dialog id="newGoalDialog">
+      <h2>Set a new goal</h2>
+      <paper-input label="Title (optional)" value="{{goal.title}}"></paper-input>
+      <h3>My goal</h3>
+      <div>
+        Complete
+        <paper-input label="Total activity" value="{{_activityTotal}}" type="number" required></paper-input>
+        <paper-input label="Activity units" value="{{goal.activityUnit}}" type="text" required></paper-input>
+        in
+        <paper-input label="Duration" value="{{_duration}}" type="number" required></paper-input>
+        days, starting
+        <paper-input label="Start date" value="{{_startDate}}" required></paper-input>.
       </div>
-      <div scheme="daily">
-        I will complete
-        <paper-input label="daily total" value="{{_dailyActivity}}"></paper-input>
-        <paper-input label="items" value="{{goal.activityUnit}}"></paper-input>
-        each day for <paper-input label="duration" value="{{_duration}}"></paper-input> days.<br>
-        By the end, I will have completed <strong>[[_totalActivity]] [[goal.activityUnit]]</strong>.
+      <h3>How</h3>
+      <div>
+        To reach this goal, complete
+        [[_calculateDailyActivity(goal.activityTotal, goal.duration)]]
+        [[goal.activityUnit]] each day from [[_formatDate(goal.startDate)]] to
+        [[_formatDate(_endDate)]].
       </div>
-    </iron-pages>
-    <div>
-      <paper-input label="Start date" value="{{_startDate}}"></paper-input>
-      <paper-input label="End date" value="[[_calculateEndDate(goal.startDate, _duration)]]" disabled></paper-input>
-    </div>
-    <paper-textarea label="Goal description (optional)" value="{{goal.description}}"></paper-textarea>
+      <paper-textarea label="Description (optional)" value="{{goal.description}}"></paper-textarea>
+      <div>
+        <paper-button dialog-confirm>Create</paper-button>
+        <paper-button dialog-dismiss>Cancel</paper-button>
+      </div>
+    </paper-dialog>
   </template>
   <script>
     Polymer({
@@ -66,61 +65,102 @@
           },
           notify: true
         },
-        _definitionScheme: {
-          type: String,
-          value: 'total'
-        },
-        _totalActivity: {
-          type: Number,
-          value: 90
-        },
-        _dailyActivity: {
-          type: Number,
-          value: 3
-        },
-        _duration: {
-          type: Number,
-          value: 30
-        },
         _startDate: {
           type: String,
-          value: function() {
-            var startDate = new Date();
-            return startDate.toLocaleDateString();
-          },
-          observer: '_startDateChanged'
+          value: ''
+        },
+        _activityTotal: {
+          type: String,
+          value: '90'
+        },
+        _duration: {
+          type: String,
+          value: '30'
+        },
+        _endDate: {
+          type: Date,
+          computed: '_calculateEndDate(goal.startDate, goal.duration)'
         }
       },
 
       observers: [
-        '_activityChanged(_totalActivity, _dailyActivity, _duration, _definitionScheme)'
+        '_goalStartDateChanged(goal.startDate)',
+        '_startDateStringChanged(_startDate)',
+        '_goalActivityTotalChanged(goal.activityTotal)',
+        '_activityTotalStringChanged(_activityTotal)',
+        '_goalDurationChanged(goal.duration)',
+        '_durationStringChanged(_duration)'
       ],
 
-      _activityChanged: function(totalActivity, dailyActivity, duration, definitionScheme) {
-        if (definitionScheme === 'total'
-            && (this.goal.activityTotal !== totalActivity
-                || this.goal.duration !== duration)) {
-          this.goal.activityTotal = totalActivity;
-          this.goal.duration = duration;
-          this._dailyActivity = Math.round(totalActivity / duration);
-        } else if (definitionScheme === 'daily'
-            && (this.goal.activityTotal !== (dailyActivity * duration)
-                || this.goal.duration !== duration)) {
-          this.goal.activityTotal = dailyActivity * duration;
-          this.goal.duration = duration;
-          this._totalActivity = dailyActivity * duration;
+      open: function() {
+        this.$.newGoalDialog.open();
+      },
+
+      _calculateDailyActivity: function(activityTotal, duration) {
+        if (activityTotal && duration && duration > 0) {
+          return Math.round(activityTotal / duration);
+        } else {
+          return null;
         }
       },
 
       _calculateEndDate: function(startDate, duration) {
-        var endDate = new Date(startDate.valueOf());
-        endDate.setDate(endDate.getDate() + duration - 1);
-        return endDate.toLocaleDateString();
+        if (startDate && duration && duration > 0) {
+          var endDate = new Date(startDate);
+          endDate.setDate(endDate.getDate() + duration - 1);
+          return endDate;
+        } else {
+          return null;
+        }
       },
 
-      _startDateChanged: function(newValue, oldValue) {
-        var startDate = new Date(newValue);
-        this.goal.startDate = startDate;
+      _formatDate: function(date) {
+        return date ? date.toLocaleDateString() : '';
+      },
+
+      _goalStartDateChanged: function(startDate) {
+        if (!isNaN(startDate)) {
+          var startDateString = this._formatDate(startDate);
+          if (startDateString !== this._startDate) this._startDate = startDateString;
+        }
+      },
+
+      _startDateStringChanged: function(startDateString) {
+        var startDate = new Date(startDateString);
+        if (!isNaN(startDate) && startDate !== this.goal.startDate) {
+          this.goal.startDate = startDate;
+          this.notifyPath('goal.startDate', this.goal.startDate);
+        }
+      },
+
+      _goalActivityTotalChanged: function(activityTotal) {
+        if (!isNaN(activityTotal)) {
+          var activityTotalString = activityTotal.toString();
+          if (activityTotalString !== this._activityTotal) this._activityTotal = activityTotalString;
+        }
+      },
+
+      _activityTotalStringChanged: function(activityTotalString) {
+        var activityTotal = parseInt(activityTotalString);
+        if (!isNaN(activityTotal) && activityTotal !== this.goal.activityTotal) {
+          this.goal.activityTotal = activityTotal;
+          this.notifyPath('goal.activityTotal', this.goal.activityTotal);
+        }
+      },
+
+      _goalDurationChanged: function(duration) {
+        if (!isNaN(duration)) {
+          var durationString = duration.toString();
+          if (durationString !== this._duration) this._duration = durationString;
+        }
+      },
+
+      _durationStringChanged: function(durationString) {
+        var duration = parseInt(durationString);
+        if (!isNaN(duration) && duration !== this.goal.duration) {
+          this.goal.duration = duration;
+          this.notifyPath('goal.duration', this.goal.duration);
+        }
       }
     });
   </script>
