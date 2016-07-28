@@ -6,6 +6,7 @@
 <link rel="import" href="../../bower_components/paper-item/paper-item-body.html">
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/polymerfire/polymerfire.html">
 
 <link rel="import" href="../goalsprint-controls/goalsprint-control-goal-create.html">
 
@@ -33,13 +34,19 @@
         text-align: right;
       }
     </style>
+
+    <firebase-document
+      path="/usergoals/{{user.uid}}"
+      data="{{goalData}}"></firebase-document>
+
     <goalsprint-control-goal-create
       id="createGoalDialog"
-      goal="{{_newGoal}}"></goalsprint-control-goal-create>
+      goal="{{_newGoal}}"
+      on-create-confirmed="_handleCreateConfirmed"></goalsprint-control-goal-create>
     <paper-material elevation="1" class="list">
       <h2 class="list__title">My current goals</h2>
       <paper-listbox>
-        <template is="dom-repeat" items="{{goals}}">
+        <template is="dom-repeat" items="{{goalData.goals}}">
           <paper-item>
             <paper-item-body two-line>
               <div>{{item.title}}</div>
@@ -61,6 +68,13 @@
         goals: {
           type: Array,
           value: function() { return []; }
+        },
+        user: {
+          type: Object
+        },
+        goalData: {
+          type: Object,
+          observer: '_goalDataChanged'
         },
         _newGoal: {
           type: Object,
@@ -90,6 +104,16 @@
         if (event.detail.confirmed) {
           this.push('goals', this._newGoal);
         }
+      },
+
+      _handleCreateConfirmed: function(event) {
+        this.push('goalData.goals', event.detail.newGoal);
+      },
+
+      _goalDataChanged: function(newValue) {
+        if (window.console && window.console.log) window.console.log(newValue);
+        if (!this.goalData.goals) this.set('goalData.goals', []);
+        if (window.console && window.console.log) window.console.log(this.goalData);
       }
     });
   </script>

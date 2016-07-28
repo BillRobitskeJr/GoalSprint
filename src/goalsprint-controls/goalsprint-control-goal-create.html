@@ -18,7 +18,9 @@
         display: inline-block;
       }
     </style>
-    <paper-dialog id="newGoalDialog">
+
+    <paper-dialog id="newGoalDialog"
+      on-iron-overlay-closed="_handleDialogClosed">
       <h2>Set a new goal</h2>
       <paper-input label="Title (optional)" value="{{goal.title}}"></paper-input>
       <h3>My goal</h3>
@@ -64,6 +66,9 @@
             };
           },
           notify: true
+        },
+        user: {
+          type: Object
         },
         _startDate: {
           type: String,
@@ -160,6 +165,15 @@
         if (!isNaN(duration) && duration !== this.goal.duration) {
           this.goal.duration = duration;
           this.notifyPath('goal.duration', this.goal.duration);
+        }
+      },
+
+      _handleDialogClosed: function(event) {
+        if (window.console && window.console.log) window.console.log(event.detail);
+        if (!event.detail.canceled && event.detail.confirmed) {
+          this.fire('create-confirmed', { newGoal: this.goal });
+        } else {
+          this.fire('create-canceled');
         }
       }
     });

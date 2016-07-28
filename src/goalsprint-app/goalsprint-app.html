@@ -38,7 +38,7 @@
     <firebase-app auth-domain="goalsprint.firebaseapp.com"
                   database-url="https://goalsprint.firebaseio.com"
                   api-key="AIzaSyB75anH1ynPLOUs9_-dnKvIngX5fKxGOwk"></firebase-app>
-    <firebase-auth user="{{user}}"></firebase-auth>
+    <firebase-auth id="firebaseAuth" user="{{user}}"></firebase-auth>
 
     <app-drawer-layout force-narrow>
 
@@ -61,12 +61,13 @@
               <paper-tab name="home">Home</paper-tab>
               <paper-tab name="goals">Goals</paper-tab>
             </paper-tabs>
+            <paper-icon-button icon="icons:account-circle" on-tap="_handleLoginTap"></paper-icon-button>
           </app-toolbar>
         </app-header>
 
         <iron-pages selected="{{page}}" attr-for-selected="name">
           <goalsprint-view-home name="home"></goalsprint-view-home>
-          <goalsprint-view-goals name="goals"></goalsprint-view-goals>
+          <goalsprint-view-goals name="goals" user="{{user}}"></goalsprint-view-goals>
         </iron-pages>
 
       </app-header-layout>
@@ -84,14 +85,24 @@
           reflectToAttribute: true,
           observer: '_pageChanged',
           value: 'home'
-        },
+        }
       },
 
       _pageChanged: function(newValue, oldValue) {
         this.importHref(this.resolveUrl('goalsprint-view-' + newValue + '.html'),
                         null, null, true);
-      }
+      },
 
+      _handleLoginTap: function(event) {
+        //this.$.firebaseAuth.signInWithPopup()
+        this.$.firebaseAuth.signInAnonymously()
+          .then(function(response) {
+            if (window.console && window.console.log) window.console.log(response);
+          })
+          .catch(function(error) {
+            if (window.console && window.console.log) window.console.log(error);
+          });
+      }
     });
   </script>
 </dom-module>
