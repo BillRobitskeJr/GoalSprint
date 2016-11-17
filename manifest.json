@@ -1,7 +1,0 @@
-{
-  "name": "GoalSprint",
-  "short_name": "GoalSprint",
-  "description": "Reach your goals in a hurry",
-  "start_url": "/",
-  "display": "standalone"
-}
