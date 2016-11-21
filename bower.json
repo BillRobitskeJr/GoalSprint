@@ -1,0 +1,20 @@
+{
+  "name": "GoalSprint",
+  "homepage": "https://github.com/BillRobitskeJr/GoalSprint",
+  "authors": [
+    "Bill Robitske",
+    "Jr. <bill.robitske.jr@gmail.com>"
+  ],
+  "description": "Reach your goals in a hurry",
+  "main": "public/index.html",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "public/bower_components",
+    "test",
+    "tests"
+  ]
+}
